@@ -128,8 +128,46 @@ h4 {
   gap: 16px;
 }
 
+.content-card.story-mode {
+  background: linear-gradient(160deg, #ffffff, #f7fbff 55%, #f3faf7);
+}
+
 .lesson-header p {
   margin-top: 6px;
+}
+
+.hook-line {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fff4df;
+  border: 1px solid #f1d7a4;
+  color: #694909;
+  animation: fade-slide-in 0.35s ease;
+}
+
+.story-panel {
+  background:
+    radial-gradient(circle at 0% 0%, rgb(247 224 177 / 50%), transparent 35%),
+    radial-gradient(circle at 100% 0%, rgb(185 225 245 / 50%), transparent 32%),
+    #fbfffe;
+  animation: fade-slide-in 0.38s ease;
+}
+
+.story-stop {
+  margin: 0 0 6px;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #d35d43;
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
 }
 
 .grid {
@@ -143,6 +181,7 @@ h4 {
   border-radius: 12px;
   padding: 12px;
   background: #fcfefd;
+  animation: fade-slide-in 0.28s ease;
 }
 
 .panel ul {
@@ -261,6 +300,11 @@ input[type='text'] {
   align-items: center;
 }
 
+.result-stack {
+  display: grid;
+  gap: 4px;
+}
+
 .primary {
   background: #d35d43;
   color: #fff;
@@ -307,6 +351,17 @@ input[type='text'] {
 
 .exam-card.locked {
   opacity: 0.7;
+}
+
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 980px) {

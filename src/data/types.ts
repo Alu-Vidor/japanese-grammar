@@ -4,6 +4,16 @@
   examples: string[]
 }
 
+export type LessonStory = {
+  stopLabel: string
+  location: string
+  scene: string
+  characters: string[]
+  visuals: string[]
+  animations: string[]
+  reward: string
+}
+
 export type VocabularyItem = {
   jp: string
   reading: string
@@ -45,8 +55,11 @@ export type Lesson = {
   id: string
   title: string
   goal: string
+  hook?: string
+  microResult?: string
   coverage: string[]
   japanContext: string
+  story?: LessonStory
   grammar: GrammarPoint[]
   vocabulary: VocabularyItem[]
   practice: PracticeExercise[]
@@ -61,3 +74,5 @@ export type ExamQuestion = {
   answer: string
   explanation: string
 }
+
+

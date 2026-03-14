@@ -58,6 +58,7 @@ function App() {
   const [examResult, setExamResult] = useState<ExamResult | null>(null)
 
   const currentLesson = lessons[currentLessonIndex]
+  const storyModeActive = Boolean(currentLesson.story)
 
   const completedLessons = useMemo(
     () => lessons.filter((lesson) => lessonScores[lesson.id]?.passed).length,
@@ -181,12 +182,47 @@ function App() {
           </ul>
         </aside>
 
-        <article className="content-card">
+        <article className={`content-card ${storyModeActive ? 'story-mode' : ''}`}>
           <section className="lesson-header">
             <h2>{currentLesson.title}</h2>
             <p>{currentLesson.goal}</p>
+            {currentLesson.hook ? <p className="hook-line">{currentLesson.hook}</p> : null}
             <p className="hint">{currentLesson.japanContext}</p>
           </section>
+
+          {currentLesson.story ? (
+            <section className="story-panel panel">
+              <p className="story-stop">{currentLesson.story.stopLabel}</p>
+              <h3>{currentLesson.story.location}</h3>
+              <p>{currentLesson.story.scene}</p>
+              <div className="story-grid">
+                <div>
+                  <h4>Персонажи</h4>
+                  <ul>
+                    {currentLesson.story.characters.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4>Визуальная сцена</h4>
+                  <ul>
+                    {currentLesson.story.visuals.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4>Микроанимации</h4>
+                  <ul>
+                    {currentLesson.story.animations.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </section>
+          ) : null}
 
           <section>
             <h3>1) Правило</h3>
@@ -272,9 +308,17 @@ function App() {
           <section className="lesson-actions">
             <button type="button" className="primary" onClick={() => checkLesson(currentLesson)}>Проверить урок</button>
             {currentScore ? (
-              <p className={currentScore.passed ? 'result ok' : 'result bad'}>
-                Результат: {currentScore.correct}/{currentScore.total}. Порог: 75%.
-              </p>
+              <div className="result-stack">
+                <p className={currentScore.passed ? 'result ok' : 'result bad'}>
+                  Результат: {currentScore.correct}/{currentScore.total}. Порог: 75%.
+                </p>
+                {currentScore.passed && currentLesson.story ? (
+                  <p className="result ok">Награда: {currentLesson.story.reward}</p>
+                ) : null}
+                {currentScore.passed && currentLesson.microResult ? (
+                  <p className="result ok">{currentLesson.microResult}</p>
+                ) : null}
+              </div>
             ) : (
               <p className="result">Порог прохождения урока: 75%.</p>
             )}
