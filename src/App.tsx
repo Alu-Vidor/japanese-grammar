@@ -3,6 +3,7 @@ import './App.css'
 import {
   N5_GRAMMAR_CHECKLIST,
   finalExam,
+  lessonUpgrades,
   lessons,
   type ChoiceExercise,
   type ExamQuestion,
@@ -21,6 +22,7 @@ const FURIGANA_RE = /\{([^|{}]+)\|([^{}]+)\}/g
 const normalize = (value: string): string => value.trim().toLowerCase().replace(/\s+/g, ' ')
 const countToken = (items: string[], token: string): number => items.filter((item) => item === token).length
 const getBuilderKey = (lessonId: string, exerciseId: string): string => `${lessonId}::${exerciseId}`
+const unique = (items: string[]): string[] => [...new Set(items)]
 
 function JPText({ text }: { text: string }) {
   const parts: ReactNode[] = []
@@ -58,7 +60,13 @@ function App() {
   const [examResult, setExamResult] = useState<ExamResult | null>(null)
 
   const currentLesson = lessons[currentLessonIndex]
+  const currentUpgrade = lessonUpgrades[currentLesson.id]
   const storyModeActive = Boolean(currentLesson.story)
+  const nextLesson = lessons[currentLessonIndex + 1] ?? null
+  const routeProgress = ((currentLessonIndex + 1) / lessons.length) * 100
+  const sceneDetails = unique([...(currentLesson.story?.visuals ?? []), ...currentUpgrade.japaneseDetails]).slice(0, 6)
+  const motionDetails = unique([...(currentLesson.story?.animations ?? []), ...currentUpgrade.animationIdeas]).slice(0, 6)
+  const sceneRefs = currentUpgrade.photoRefs.slice(0, 3)
 
   const completedLessons = useMemo(
     () => lessons.filter((lesson) => lessonScores[lesson.id]?.passed).length,
@@ -182,12 +190,53 @@ function App() {
           </ul>
         </aside>
 
-        <article className={`content-card ${storyModeActive ? 'story-mode' : ''}`}>
+        <article key={currentLesson.id} className={`content-card ${storyModeActive ? 'story-mode' : ''}`}>
+          <section className="journey-strip panel">
+            <div className="journey-head">
+              <div>
+                <p className="story-stop">Маршрут по Японии</p>
+                <h2>{currentLesson.title}</h2>
+              </div>
+              <p className="journey-progress">Остановка {currentLessonIndex + 1} из {lessons.length}</p>
+            </div>
+            <div className="route-line" aria-hidden="true">
+              <div className="route-fill" style={{ width: `${routeProgress}%` }} />
+              <div className="route-dots">
+                {lessons.map((lesson, index) => (
+                  <span
+                    key={lesson.id}
+                    className={`route-dot ${index <= currentLessonIndex ? 'passed' : ''} ${lesson.id === currentLesson.id ? 'current' : ''}`}
+                  />
+                ))}
+              </div>
+            </div>
+            <p className="journey-copy">
+              {currentLesson.story
+                ? `${currentLesson.story.stopLabel}. ${currentLesson.story.location}`
+                : currentLesson.japanContext}
+              {nextLesson ? ` Следом: ${nextLesson.title}.` : ' Это финальная остановка маршрута.'}
+            </p>
+          </section>
+
           <section className="lesson-header">
-            <h2>{currentLesson.title}</h2>
             <p>{currentLesson.goal}</p>
             {currentLesson.hook ? <p className="hook-line">{currentLesson.hook}</p> : null}
             <p className="hint">{currentLesson.japanContext}</p>
+          </section>
+
+          <section className="mission-grid">
+            <div className="mission-card panel">
+              <p className="mission-label">Сейчас ты делаешь</p>
+              <p>{currentLesson.goal}</p>
+            </div>
+            <div className="mission-card panel">
+              <p className="mission-label">Ощущение сцены</p>
+              <p>{currentLesson.story ? currentLesson.story.scene : currentLesson.japanContext}</p>
+            </div>
+            <div className="mission-card panel">
+              <p className="mission-label">Финальный эффект</p>
+              <p>{currentLesson.microResult ?? 'В конце урока ты забираешь новый кусочек маршрута в свой японский день.'}</p>
+            </div>
           </section>
 
           {currentLesson.story ? (
@@ -205,17 +254,17 @@ function App() {
                   </ul>
                 </div>
                 <div>
-                  <h4>Визуальная сцена</h4>
+                  <h4>В кадре</h4>
                   <ul>
-                    {currentLesson.story.visuals.map((item) => (
+                    {sceneDetails.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <h4>Микроанимации</h4>
+                  <h4>Оживление сцены</h4>
                   <ul>
-                    {currentLesson.story.animations.map((item) => (
+                    {motionDetails.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
@@ -224,8 +273,37 @@ function App() {
             </section>
           ) : null}
 
+          <section className="atmosphere-grid">
+            <div className="panel atmosphere-card">
+              <p className="mission-label">Атмосфера остановки</p>
+              <div className="detail-cloud">
+                {sceneDetails.map((item) => (
+                  <span key={item} className="detail-pill">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div className="panel atmosphere-card">
+              <p className="mission-label">Визуальный ритм</p>
+              <div className="detail-cloud">
+                {motionDetails.slice(0, 4).map((item) => (
+                  <span key={item} className="detail-pill motion">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div className="panel atmosphere-card">
+              <p className="mission-label">Фото-референсы сцены</p>
+              <div className="ref-links">
+                {sceneRefs.map((ref) => (
+                  <a key={ref.url} href={ref.url} target="_blank" rel="noreferrer">
+                    {ref.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+
           <section>
-            <h3>1) Правило</h3>
+            <h3>1) Что замечаем в реплике</h3>
             <div className="grid">
               {currentLesson.grammar.map((point) => (
                 <div className="panel" key={point.title}>
@@ -242,7 +320,7 @@ function App() {
           </section>
 
           <section>
-            <h3>2) Лексика</h3>
+            <h3>2) Что увидишь и услышишь в сцене</h3>
             <div className="vocabulary-grid">
               {currentLesson.vocabulary.map((item) => (
                 <article key={`${item.jp}-${item.reading}`} className="word-card">
@@ -255,7 +333,7 @@ function App() {
           </section>
 
           <section>
-            <h3>3) Практика</h3>
+            <h3>3) Игровая практика без ввода текста</h3>
             <div className="exercise-stack">
               {currentLesson.practice.map((exercise) => (
                 <PracticeBlock
@@ -274,7 +352,7 @@ function App() {
           </section>
 
           <section>
-            <h3>4) Текст с вариантами в пропусках</h3>
+            <h3>4) Финальная мини-сцена</h3>
             <div className="panel cloze-panel">
               <h4>{currentLesson.cloze.title}</h4>
               <p className="cloze-text">
@@ -317,6 +395,16 @@ function App() {
                 ) : null}
                 {currentScore.passed && currentLesson.microResult ? (
                   <p className="result ok">{currentLesson.microResult}</p>
+                ) : null}
+                {currentScore.passed ? (
+                  <div className="celebration-card panel">
+                    <p className="celebration-label">Финал остановки</p>
+                    <h4>{currentLesson.story?.reward ?? 'Новая отметка маршрута'}</h4>
+                    <p>
+                      {currentUpgrade.finale[0]}
+                      {nextLesson ? ` Дальше тебя ждет ${nextLesson.title.toLowerCase()}.` : ' Маршрут завершен на теплой финальной ноте.'}
+                    </p>
+                  </div>
                 ) : null}
               </div>
             ) : (

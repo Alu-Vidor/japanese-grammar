@@ -14,6 +14,21 @@ export type LessonStory = {
   reward: string
 }
 
+export type VisualReference = {
+  label: string
+  url: string
+}
+
+export type LessonUpgrade = {
+  weakSpots: string[]
+  engagementBoosts: string[]
+  animationIdeas: string[]
+  japaneseDetails: string[]
+  transitions: string[]
+  finale: string[]
+  photoRefs: VisualReference[]
+}
+
 export type VocabularyItem = {
   jp: string
   reading: string
