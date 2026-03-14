@@ -1,33 +1,33 @@
 import { type LessonUpgrade } from './types'
 
 const tokyoCampusRefs = [
-  { label: 'The University of Tokyo', url: 'https://www.u-tokyo.ac.jp/en/about/campus-guide.html' },
-  { label: 'Tokyo Station / Marunouchi', url: 'https://www.gotokyo.org/en/spot/69/index.html' },
+  { label: 'Токийский университет (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/1/1f/Yasuda_Auditorium_-_University_of_Tokyo_-_01.jpg' },
+  { label: 'Токио стейшн, Маруноути (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Tokyo_Station_Marunouchi_Building_2023.jpg' },
 ]
 
 const shibuyaRefs = [
-  { label: 'Shibuya Crossing', url: 'https://www.gotokyo.org/en/spot/63/index.html' },
-  { label: 'Shinjuku area', url: 'https://www.gotokyo.org/en/destinations/western-tokyo/shinjuku/index.html' },
+  { label: 'Shibuya Crossing (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Shibuya_Crossing%2C_Tokyo%2C_Japan_%282018%29.jpg' },
+  { label: 'Вечерний Синдзюку (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/9/9e/Shinjuku_at_night_2018.jpg' },
 ]
 
 const asakusaRefs = [
-  { label: 'Senso-ji Temple', url: 'https://www.japan.travel/en/spot/596/' },
-  { label: 'Asakusa', url: 'https://www.gotokyo.org/en/destinations/eastern-tokyo/asakusa/index.html' },
+  { label: 'Храм Сэнсо-дзи (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Sensoji_Temple_Asakusa_Tokyo_Japan.jpg' },
+  { label: 'Каминаримон, Асакуса (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Kaminarimon%2C_Sensoji%2C_Asakusa%2C_Tokyo.jpg' },
 ]
 
 const uenoRefs = [
-  { label: 'Ueno Park', url: 'https://www.gotokyo.org/en/spot/1/index.html' },
-  { label: 'Tokyo National Museum area', url: 'https://www.gotokyo.org/en/spot/12/index.html' },
+  { label: 'Парк Уэно (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Ueno_Park_2019.jpg' },
+  { label: 'Токийский национальный музей (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Tokyo_National_Museum_Honkan_2010.jpg' },
 ]
 
 const kyotoRefs = [
-  { label: 'Kyoto City Travel', url: 'https://kyoto.travel/en' },
-  { label: 'Nishiki Market', url: 'https://www.japan.travel/en/spot/2031/' },
+  { label: 'Киото, улица Гион (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/e/e8/Gion%2C_Kyoto%2C_Japan.jpg' },
+  { label: 'Рынок Нисики (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Nishiki_Market_Kyoto_Japan.jpg' },
 ]
 
 const stationRefs = [
-  { label: 'Tokyo Station', url: 'https://www.gotokyo.org/en/spot/69/index.html' },
-  { label: 'Shinjuku', url: 'https://www.gotokyo.org/en/destinations/western-tokyo/shinjuku/index.html' },
+  { label: 'Станция Токио (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/e/e9/Tokyo_Station_yaesu_entrance_2022.jpg' },
+  { label: 'Станция Синдзюку (Wikipedia)', url: 'https://upload.wikimedia.org/wikipedia/commons/d/db/Shinjuku_Station_East_Exit_Square_2022.jpg' },
 ]
 
 export const lessonUpgrades: Record<string, LessonUpgrade> = {
