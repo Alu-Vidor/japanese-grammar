@@ -1,43 +1,29 @@
-﻿import { Fragment, useMemo, useState } from 'react'
+﻿import { Fragment, useMemo, useState, type ReactNode } from 'react'
 import './App.css'
 import {
   N5_GRAMMAR_CHECKLIST,
   finalExam,
   lessons,
+  type ChoiceExercise,
   type ExamQuestion,
   type Lesson,
   type PracticeExercise,
   type SentenceBuilderExercise,
 } from './data'
 
-type LessonScore = {
-  correct: number
-  total: number
-  passed: boolean
-}
-
-type ExamResult = {
-  correct: number
-  total: number
-  passed: boolean
-}
+type LessonScore = { correct: number; total: number; passed: boolean }
+type ExamResult = { correct: number; total: number; passed: boolean }
 
 const LESSON_PASS_RATE = 0.75
 const EXAM_PASS_RATE = 0.75
 const FURIGANA_RE = /\{([^|{}]+)\|([^{}]+)\}/g
 
 const normalize = (value: string): string => value.trim().toLowerCase().replace(/\s+/g, ' ')
-
-const compareAnswer = (value: string, accepted: string[]): boolean => {
-  const normalized = normalize(value)
-  return accepted.some((item) => normalize(item) === normalized)
-}
-
 const countToken = (items: string[], token: string): number => items.filter((item) => item === token).length
 const getBuilderKey = (lessonId: string, exerciseId: string): string => `${lessonId}::${exerciseId}`
 
 function JPText({ text }: { text: string }) {
-  const parts: React.ReactNode[] = []
+  const parts: ReactNode[] = []
   let lastIndex = 0
   let index = 0
 
@@ -46,7 +32,6 @@ function JPText({ text }: { text: string }) {
     if (start > lastIndex) {
       parts.push(<Fragment key={`text-${index++}`}>{text.slice(lastIndex, start)}</Fragment>)
     }
-
     parts.push(
       <ruby key={`ruby-${index++}`}>
         {match[1]}
@@ -65,11 +50,11 @@ function JPText({ text }: { text: string }) {
 
 function App() {
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0)
-  const [practiceInputs, setPracticeInputs] = useState<Record<string, string>>({})
-  const [clozeInputs, setClozeInputs] = useState<Record<string, string>>({})
+  const [practiceAnswers, setPracticeAnswers] = useState<Record<string, string>>({})
+  const [clozeAnswers, setClozeAnswers] = useState<Record<string, string>>({})
   const [builderDraft, setBuilderDraft] = useState<Record<string, string[]>>({})
   const [lessonScores, setLessonScores] = useState<Record<string, LessonScore>>({})
-  const [examInputs, setExamInputs] = useState<Record<string, string>>({})
+  const [examAnswers, setExamAnswers] = useState<Record<string, string>>({})
   const [examResult, setExamResult] = useState<ExamResult | null>(null)
 
   const currentLesson = lessons[currentLessonIndex]
@@ -79,31 +64,25 @@ function App() {
     [lessonScores],
   )
 
-  const grammarCoverage = useMemo(() => {
+  const coverage = useMemo(() => {
     const covered = new Set(lessons.flatMap((lesson) => lesson.coverage))
     return {
-      total: N5_GRAMMAR_CHECKLIST.length,
       covered: N5_GRAMMAR_CHECKLIST.filter((item) => covered.has(item.id)).length,
+      total: N5_GRAMMAR_CHECKLIST.length,
       missing: N5_GRAMMAR_CHECKLIST.filter((item) => !covered.has(item.id)),
     }
   }, [])
 
   const isExamUnlocked = completedLessons === lessons.length
+  const isLessonUnlocked = (index: number): boolean => index === 0 || Boolean(lessonScores[lessons[index - 1].id]?.passed)
 
-  const isLessonUnlocked = (index: number): boolean => {
-    if (index === 0) return true
-    return Boolean(lessonScores[lessons[index - 1].id]?.passed)
-  }
-
-  const getBuiltTokens = (lessonId: string, exerciseId: string): string[] => {
-    return builderDraft[getBuilderKey(lessonId, exerciseId)] ?? []
-  }
+  const getBuiltTokens = (lessonId: string, exerciseId: string): string[] =>
+    builderDraft[getBuilderKey(lessonId, exerciseId)] ?? []
 
   const addToken = (lessonId: string, exercise: SentenceBuilderExercise, token: string): void => {
     const key = getBuilderKey(lessonId, exercise.id)
     const built = getBuiltTokens(lessonId, exercise.id)
     if (countToken(built, token) >= countToken(exercise.tokens, token)) return
-
     setBuilderDraft((prev) => ({ ...prev, [key]: [...built, token] }))
   }
 
@@ -124,15 +103,10 @@ function App() {
       if (exercise.type === 'builder') {
         const built = getBuiltTokens(lesson.id, exercise.id)
         if (normalize(built.join(' ')) === normalize(exercise.answer.join(' '))) correct += 1
-        return
       }
-
       if (exercise.type === 'choice') {
-        if (normalize(practiceInputs[exercise.id] ?? '') === normalize(exercise.answer)) correct += 1
-        return
+        if (normalize(practiceAnswers[exercise.id] ?? '') === normalize(exercise.answer)) correct += 1
       }
-
-      if (compareAnswer(practiceInputs[exercise.id] ?? '', exercise.answer)) correct += 1
     })
 
     return { correct, total: lesson.practice.length }
@@ -141,16 +115,16 @@ function App() {
   const evaluateCloze = (lesson: Lesson): { correct: number; total: number } => {
     let correct = 0
     lesson.cloze.blanks.forEach((blank) => {
-      if (compareAnswer(clozeInputs[blank.id] ?? '', blank.answer)) correct += 1
+      if (normalize(clozeAnswers[blank.id] ?? '') === normalize(blank.answer)) correct += 1
     })
     return { correct, total: lesson.cloze.blanks.length }
   }
 
   const checkLesson = (lesson: Lesson): void => {
-    const practiceResult = evaluatePractice(lesson)
-    const clozeResult = evaluateCloze(lesson)
-    const total = practiceResult.total + clozeResult.total
-    const correct = practiceResult.correct + clozeResult.correct
+    const practice = evaluatePractice(lesson)
+    const cloze = evaluateCloze(lesson)
+    const total = practice.total + cloze.total
+    const correct = practice.correct + cloze.correct
     const passed = correct / total >= LESSON_PASS_RATE
 
     setLessonScores((prev) => ({ ...prev, [lesson.id]: { correct, total, passed } }))
@@ -159,39 +133,33 @@ function App() {
 
   const checkExam = (): void => {
     let correct = 0
-
     finalExam.forEach((question) => {
-      const value = examInputs[question.id] ?? ''
-      const ok = question.type === 'choice' ? normalize(value) === normalize(question.answer) : compareAnswer(value, question.answer)
-      if (ok) correct += 1
+      if (normalize(examAnswers[question.id] ?? '') === normalize(question.answer)) correct += 1
     })
-
     const total = finalExam.length
     setExamResult({ correct, total, passed: correct / total >= EXAM_PASS_RATE })
   }
+
+  const currentScore = lessonScores[currentLesson.id]
 
   return (
     <main className="app-shell">
       <header className="hero-block">
         <p className="eyebrow">Japanese Grammar Trainer</p>
-        <h1>JLPT N5: полный курс по грамматике</h1>
-        <p className="subtitle">
-          Урок: правило, словарь, разнотипные задания, затем связный текст с пропусками.
-        </p>
+        <h1>JLPT N5: атомарный курс грамматики</h1>
+        <p className="subtitle">Каждый урок закрывает одну тему, с контекстом реальной Японии и заданиями без ввода текста.</p>
         <p className="progress">Пройдено уроков: {completedLessons}/{lessons.length}</p>
-        <p className="progress">Покрытие грамматики N5: {grammarCoverage.covered}/{grammarCoverage.total}</p>
-        {grammarCoverage.missing.length === 0 ? (
-          <p className="result ok">Все пункты N5 из чек-листа покрыты в уроках.</p>
+        <p className="progress">Покрытие N5: {coverage.covered}/{coverage.total}</p>
+        {coverage.missing.length === 0 ? (
+          <p className="result ok">Покрытие полное: все темы чек-листа N5 включены.</p>
         ) : (
-          <p className="result bad">
-            Не покрыто: {grammarCoverage.missing.map((item) => item.label).join(', ')}
-          </p>
+          <p className="result bad">Не покрыто: {coverage.missing.map((x) => x.label).join(', ')}</p>
         )}
       </header>
 
       <section className="layout">
         <aside className="sidebar">
-          <h2>Темы N5</h2>
+          <h2>Уроки</h2>
           <ul>
             {lessons.map((lesson, index) => {
               const unlocked = isLessonUnlocked(index)
@@ -217,10 +185,11 @@ function App() {
           <section className="lesson-header">
             <h2>{currentLesson.title}</h2>
             <p>{currentLesson.goal}</p>
+            <p className="hint">{currentLesson.japanContext}</p>
           </section>
 
           <section>
-            <h3>1) Объяснение правила</h3>
+            <h3>1) Правило</h3>
             <div className="grid">
               {currentLesson.grammar.map((point) => (
                 <div className="panel" key={point.title}>
@@ -237,7 +206,7 @@ function App() {
           </section>
 
           <section>
-            <h3>2) Необходимая лексика</h3>
+            <h3>2) Лексика</h3>
             <div className="vocabulary-grid">
               {currentLesson.vocabulary.map((item) => (
                 <article key={`${item.jp}-${item.reading}`} className="word-card">
@@ -250,41 +219,49 @@ function App() {
           </section>
 
           <section>
-            <h3>3) Практика (разная сложность)</h3>
+            <h3>3) Практика</h3>
             <div className="exercise-stack">
               {currentLesson.practice.map((exercise) => (
                 <PracticeBlock
                   key={exercise.id}
                   lessonId={currentLesson.id}
                   exercise={exercise}
+                  value={practiceAnswers[exercise.id] ?? ''}
                   builtTokens={getBuiltTokens(currentLesson.id, exercise.id)}
-                  formValue={practiceInputs[exercise.id] ?? ''}
+                  onPick={(id, value) => setPracticeAnswers((prev) => ({ ...prev, [id]: value }))}
                   onAddToken={addToken}
                   onRemoveToken={removeToken}
                   onClearTokens={clearTokens}
-                  onChangeFormValue={(id, value) => setPracticeInputs((prev) => ({ ...prev, [id]: value }))}
                 />
               ))}
             </div>
           </section>
 
           <section>
-            <h3>4) Заполни пропуски в тексте</h3>
+            <h3>4) Текст с вариантами в пропусках</h3>
             <div className="panel cloze-panel">
               <h4>{currentLesson.cloze.title}</h4>
               <p className="cloze-text">
-                {currentLesson.cloze.textParts.map((part, index) => (
-                  <span key={`${currentLesson.id}-part-${index}`}>
+                {currentLesson.cloze.textParts.map((part, idx) => (
+                  <span key={`${currentLesson.id}-part-${idx}`}>
                     <JPText text={part} />
-                    {index < currentLesson.cloze.blanks.length ? (
-                      <input
-                        type="text"
-                        value={clozeInputs[currentLesson.cloze.blanks[index].id] ?? ''}
-                        placeholder={currentLesson.cloze.blanks[index].placeholder}
-                        onChange={(event) =>
-                          setClozeInputs((prev) => ({ ...prev, [currentLesson.cloze.blanks[index].id]: event.target.value }))
-                        }
-                      />
+                    {idx < currentLesson.cloze.blanks.length ? (
+                      <span className="inline-choice">
+                        {currentLesson.cloze.blanks[idx].options.map((option) => {
+                          const blank = currentLesson.cloze.blanks[idx]
+                          const selected = clozeAnswers[blank.id] === option
+                          return (
+                            <button
+                              type="button"
+                              key={`${blank.id}-${option}`}
+                              className={`mini-option ${selected ? 'selected' : ''}`}
+                              onClick={() => setClozeAnswers((prev) => ({ ...prev, [blank.id]: option }))}
+                            >
+                              <JPText text={option} />
+                            </button>
+                          )
+                        })}
+                      </span>
                     ) : null}
                   </span>
                 ))}
@@ -293,12 +270,10 @@ function App() {
           </section>
 
           <section className="lesson-actions">
-            <button type="button" className="primary" onClick={() => checkLesson(currentLesson)}>
-              Проверить урок
-            </button>
-            {lessonScores[currentLesson.id] ? (
-              <p className={lessonScores[currentLesson.id].passed ? 'result ok' : 'result bad'}>
-                Результат: {lessonScores[currentLesson.id].correct}/{lessonScores[currentLesson.id].total}. Порог: 75%.
+            <button type="button" className="primary" onClick={() => checkLesson(currentLesson)}>Проверить урок</button>
+            {currentScore ? (
+              <p className={currentScore.passed ? 'result ok' : 'result bad'}>
+                Результат: {currentScore.correct}/{currentScore.total}. Порог: 75%.
               </p>
             ) : (
               <p className="result">Порог прохождения урока: 75%.</p>
@@ -309,22 +284,21 @@ function App() {
 
       <section className="exam-section">
         <div className="exam-head">
-          <h2>Грамматическая часть JLPT N5</h2>
+          <h2>Финальный грамматический тест N5</h2>
           <p>Экзамен открыт: <strong>{isExamUnlocked ? 'да' : 'нет'}</strong></p>
         </div>
-
         <div className={`exam-card ${isExamUnlocked ? '' : 'locked'}`}>
           {!isExamUnlocked ? (
-            <p>Сначала заверши все уроки.</p>
+            <p>Пройди все уроки, и тест откроется.</p>
           ) : (
             <>
               <div className="exam-grid">
-                {finalExam.map((question) => (
+                {finalExam.map((q) => (
                   <ExamQuestionBlock
-                    key={question.id}
-                    question={question}
-                    value={examInputs[question.id] ?? ''}
-                    onChange={(id, value) => setExamInputs((prev) => ({ ...prev, [id]: value }))}
+                    key={q.id}
+                    question={q}
+                    value={examAnswers[q.id] ?? ''}
+                    onChange={(id, value) => setExamAnswers((prev) => ({ ...prev, [id]: value }))}
                   />
                 ))}
               </div>
@@ -345,24 +319,15 @@ function App() {
 type PracticeBlockProps = {
   lessonId: string
   exercise: PracticeExercise
+  value: string
   builtTokens: string[]
-  formValue: string
+  onPick: (id: string, value: string) => void
   onAddToken: (lessonId: string, exercise: SentenceBuilderExercise, token: string) => void
   onRemoveToken: (lessonId: string, exerciseId: string, index: number) => void
   onClearTokens: (lessonId: string, exerciseId: string) => void
-  onChangeFormValue: (exerciseId: string, value: string) => void
 }
 
-function PracticeBlock({
-  lessonId,
-  exercise,
-  builtTokens,
-  formValue,
-  onAddToken,
-  onRemoveToken,
-  onClearTokens,
-  onChangeFormValue,
-}: PracticeBlockProps) {
+function PracticeBlock({ lessonId, exercise, value, builtTokens, onPick, onAddToken, onRemoveToken, onClearTokens }: PracticeBlockProps) {
   if (exercise.type === 'builder') {
     return (
       <article className="panel">
@@ -371,7 +336,7 @@ function PracticeBlock({
           {exercise.tokens.map((token, idx) => {
             const disabled = countToken(builtTokens, token) >= countToken(exercise.tokens, token)
             return (
-              <button type="button" key={`${exercise.id}-token-${idx}`} disabled={disabled} onClick={() => onAddToken(lessonId, exercise, token)}>
+              <button key={`${exercise.id}-token-${idx}`} type="button" disabled={disabled} onClick={() => onAddToken(lessonId, exercise, token)}>
                 <JPText text={token} />
               </button>
             )
@@ -379,48 +344,33 @@ function PracticeBlock({
         </div>
         <div className="token-result">
           {builtTokens.length === 0 ? (
-            <p>Нажимай слова по порядку, затем при необходимости убирай лишние.</p>
+            <p>Нажимай плитки в нужном порядке.</p>
           ) : (
             builtTokens.map((token, idx) => (
-              <button type="button" key={`${exercise.id}-built-${idx}`} onClick={() => onRemoveToken(lessonId, exercise.id, idx)}>
+              <button key={`${exercise.id}-built-${idx}`} type="button" onClick={() => onRemoveToken(lessonId, exercise.id, idx)}>
                 <JPText text={token} />
               </button>
             ))
           )}
         </div>
-        <button type="button" className="secondary" onClick={() => onClearTokens(lessonId, exercise.id)}>Очистить</button>
+        <button className="secondary" type="button" onClick={() => onClearTokens(lessonId, exercise.id)}>Очистить</button>
       </article>
     )
   }
 
-  if (exercise.type === 'choice') {
-    return (
-      <article className="panel">
-        <h4><JPText text={exercise.prompt} /></h4>
-        <div className="choice-grid">
-          {exercise.options.map((option) => (
-            <label key={`${exercise.id}-${option}`}>
-              <input
-                type="radio"
-                name={exercise.id}
-                checked={formValue === option}
-                onChange={() => onChangeFormValue(exercise.id, option)}
-              />
-              <span><JPText text={option} /></span>
-            </label>
-          ))}
-        </div>
-        <p className="hint">{exercise.explanation}</p>
-      </article>
-    )
-  }
-
+  const choice = exercise as ChoiceExercise
   return (
     <article className="panel">
-      <h4><JPText text={exercise.prompt} /></h4>
-      <p className="hint"><JPText text={exercise.base} /></p>
-      <p>{exercise.instruction}</p>
-      <input type="text" value={formValue} onChange={(event) => onChangeFormValue(exercise.id, event.target.value)} placeholder="Введите ответ" />
+      <h4><JPText text={choice.prompt} /></h4>
+      <div className="choice-grid">
+        {choice.options.map((option) => (
+          <label key={`${choice.id}-${option}`}>
+            <input type="radio" name={choice.id} checked={value === option} onChange={() => onPick(choice.id, option)} />
+            <span><JPText text={option} /></span>
+          </label>
+        ))}
+      </div>
+      <p className="hint">{choice.explanation}</p>
     </article>
   )
 }
@@ -428,31 +378,21 @@ function PracticeBlock({
 type ExamQuestionBlockProps = {
   question: ExamQuestion
   value: string
-  onChange: (questionId: string, value: string) => void
+  onChange: (id: string, value: string) => void
 }
 
 function ExamQuestionBlock({ question, value, onChange }: ExamQuestionBlockProps) {
-  if (question.type === 'choice') {
-    return (
-      <article className="panel exam-question">
-        <h4><JPText text={question.prompt} /></h4>
-        <div className="choice-grid">
-          {question.options.map((option) => (
-            <label key={`${question.id}-${option}`}>
-              <input type="radio" name={question.id} checked={value === option} onChange={() => onChange(question.id, option)} />
-              <span><JPText text={option} /></span>
-            </label>
-          ))}
-        </div>
-        <p className="hint">{question.explanation}</p>
-      </article>
-    )
-  }
-
   return (
     <article className="panel exam-question">
       <h4><JPText text={question.prompt} /></h4>
-      <input type="text" value={value} onChange={(event) => onChange(question.id, event.target.value)} placeholder="Введите форму" />
+      <div className="choice-grid">
+        {question.options.map((option) => (
+          <label key={`${question.id}-${option}`}>
+            <input type="radio" name={question.id} checked={value === option} onChange={() => onChange(question.id, option)} />
+            <span><JPText text={option} /></span>
+          </label>
+        ))}
+      </div>
       <p className="hint">{question.explanation}</p>
     </article>
   )

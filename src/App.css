@@ -228,6 +228,27 @@ input[type='text'] {
   line-height: 2.1;
 }
 
+.inline-choice {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-inline: 6px;
+  vertical-align: middle;
+}
+
+.mini-option {
+  border: 1px solid #b8d3cc;
+  border-radius: 8px;
+  background: #f7fcfa;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.mini-option.selected {
+  border-color: #d35d43;
+  background: #fff3ee;
+}
+
 .hint {
   color: #476;
   font-size: 0.92rem;
