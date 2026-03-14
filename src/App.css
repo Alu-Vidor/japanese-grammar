@@ -1,0 +1,300 @@
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  color: #1f2a2e;
+}
+
+.hero-block {
+  background: radial-gradient(circle at 12% 25%, #ffe9c8 0, #ffe9c8 20%, transparent 48%),
+    radial-gradient(circle at 85% 15%, #b9e8e2 0, #b9e8e2 22%, transparent 46%),
+    linear-gradient(135deg, #fef6eb, #eff7f5);
+  border: 1px solid #d1e3df;
+  border-radius: 24px;
+  padding: 26px;
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #d35d43;
+  color: #fff;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Trebuchet MS', 'Noto Sans JP', sans-serif;
+  color: #162028;
+}
+
+ruby rt {
+  font-size: 0.68em;
+  color: #506b64;
+}
+
+h1 {
+  margin: 12px 0 10px;
+  font-size: clamp(1.8rem, 2.8vw, 2.8rem);
+}
+
+h2 {
+  margin: 0;
+}
+
+h3 {
+  margin: 0 0 10px;
+}
+
+h4 {
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  margin: 0;
+}
+
+.progress {
+  font-weight: 700;
+  color: #20473c;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 18px;
+}
+
+.sidebar,
+.content-card,
+.exam-card {
+  background: #ffffff;
+  border: 1px solid #d7e3df;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 8px 20px rgb(20 33 36 / 0.08);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  display: grid;
+  gap: 8px;
+}
+
+.lesson-tab {
+  width: 100%;
+  border: 1px solid #bfd4cf;
+  background: #f8fcfb;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lesson-tab.active {
+  border-color: #d35d43;
+  background: #fff3ee;
+}
+
+.lesson-tab:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.status {
+  font-size: 0.85rem;
+  color: #456;
+}
+
+.exam-teaser {
+  border-top: 1px dashed #c5d7d2;
+  padding-top: 12px;
+}
+
+.content-card {
+  display: grid;
+  gap: 16px;
+}
+
+.lesson-header p {
+  margin-top: 6px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.panel {
+  border: 1px solid #d5e5e1;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fcfefd;
+}
+
+.panel ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.vocabulary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.word-card {
+  border: 1px solid #cadfd8;
+  border-radius: 12px;
+  padding: 10px;
+  background: linear-gradient(140deg, #fff, #f5fbf9);
+}
+
+.word-card p {
+  margin: 0;
+}
+
+.word-card .jp {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.exercise-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.token-bank,
+.token-result,
+.choice-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: 10px;
+}
+
+.token-bank button,
+.token-result button,
+.choice-grid label,
+.primary,
+.secondary {
+  border: 1px solid #b8d3cc;
+  border-radius: 10px;
+  background: #f7fcfa;
+  padding: 8px 10px;
+}
+
+.token-bank button,
+.token-result button,
+.primary,
+.secondary {
+  cursor: pointer;
+}
+
+.choice-grid label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+input[type='text'] {
+  width: min(440px, 100%);
+  border: 1px solid #b7d1ca;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 8px;
+  font: inherit;
+}
+
+.cloze-panel input[type='text'] {
+  margin: 0 6px;
+  width: 170px;
+}
+
+.cloze-text {
+  line-height: 2.1;
+}
+
+.hint {
+  color: #476;
+  font-size: 0.92rem;
+}
+
+.lesson-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.primary {
+  background: #d35d43;
+  color: #fff;
+  border-color: #d35d43;
+  font-weight: 700;
+}
+
+.secondary {
+  background: #edf7f4;
+}
+
+.result {
+  margin: 0;
+}
+
+.result.ok {
+  color: #1a6f56;
+  font-weight: 700;
+}
+
+.result.bad {
+  color: #9c2e2e;
+  font-weight: 700;
+}
+
+.exam-section {
+  margin-top: 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.exam-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.exam-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px;
+}
+
+.exam-card.locked {
+  opacity: 0.7;
+}
+
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell {
+    padding: 14px;
+  }
+}
+
