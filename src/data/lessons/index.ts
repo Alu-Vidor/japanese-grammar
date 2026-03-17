@@ -1,4 +1,6 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
+import { lessonKana01 } from './kana-01'
+import { lessonKana02 } from './kana-02'
 import { lessonN501 } from './n5-01'
 import { lessonN502 } from './n5-02'
 import { lessonN503 } from './n5-03'
@@ -21,6 +23,8 @@ import { lessonN519 } from './n5-19'
 import { lessonN520 } from './n5-20'
 
 export const lessons: Lesson[] = [
+  lessonKana01,
+  lessonKana02,
   lessonN501,
   lessonN502,
   lessonN503,
