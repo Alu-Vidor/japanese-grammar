@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN520: Lesson = {
   id: 'n5-20',
@@ -21,7 +21,8 @@ export const lessonN520: Lesson = {
     {
       title: 'До и после',
       rule: 'V辞書 + 前に; Vた + あとで.',
-      examples: ['{寝|ね}る {前|まえ}に はを みがきます。', '{食|た}べた あとで {勉強|べんきょう}します。'],
+      examples: ['{寝|ね}る {前|まえ}に はを みгаきます。', '{食|た}べた あとで {勉強|べんきょう}します。'],
+      translations: ['Чищу зубы перед тем, как лечь спать.', 'После еды я учусь.'],
     },
   ],
   vocabulary: [

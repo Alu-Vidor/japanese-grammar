@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN516: Lesson = {
   id: 'n5-16',
@@ -21,7 +21,8 @@ export const lessonN516: Lesson = {
     {
       title: 'そこ',
       rule: 'そこ — место рядом с собеседником.',
-      examples: ['そこは {出口|でぐち}ですか。', 'そこに {水|みず}が ありますか。'],
+      examples: ['そこは {出口|でぐち}ですか。', 'そこに {水|みず}가 ありますか。'],
+      translations: ['Там выход?', 'Там есть вода?'],
     },
   ],
   vocabulary: [

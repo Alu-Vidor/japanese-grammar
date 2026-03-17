@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN508: Lesson = {
   id: 'n5-08',
@@ -22,6 +22,7 @@ export const lessonN508: Lesson = {
       title: 'あれ',
       rule: 'あれ — удаленный от обоих предмет.',
       examples: ['あれは {寺|てら}です。', 'あれは {有名|ゆうめい}な {店|みせ}ですか。'],
+      translations: ['Вон то — храм.', 'Вон то — известный магазин?'],
     },
   ],
   vocabulary: [

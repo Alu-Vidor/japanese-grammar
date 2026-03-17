@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN514: Lesson = {
   id: 'n5-14',
@@ -22,6 +22,7 @@ export const lessonN514: Lesson = {
       title: 'どの + существительное',
       rule: 'どの обязательно ставится перед существительным: どの じてんしゃ.',
       examples: ['どの {自転車|じてんしゃ}ですか。', 'どの {道|みち}が べんりですか。'],
+      translations: ['Который это велосипед?', 'Какая дорога удобная?'],
     },
   ],
   vocabulary: [

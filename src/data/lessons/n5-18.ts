@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN518: Lesson = {
   id: 'n5-18',
@@ -22,6 +22,7 @@ export const lessonN518: Lesson = {
       title: 'どこ',
       rule: 'どこ — вопросительное слово «где?».',
       examples: ['トイレは どこですか。', '{山手線|やまのてせん}の ホームは どこですか。'],
+      translations: ['Где туалет?', 'Где платформа линии Яманотэ?'],
     },
   ],
   vocabulary: [

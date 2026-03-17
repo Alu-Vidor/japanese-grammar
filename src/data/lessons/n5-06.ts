@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN506: Lesson = {
   id: 'n5-06',
@@ -22,6 +22,7 @@ export const lessonN506: Lesson = {
       title: 'これ',
       rule: 'これ используем как самостоятельное «это» для предмета рядом с говорящим.',
       examples: ['これは {地図|ちず}です。', 'これは {切符|きっぷ}ですか。'],
+      translations: ['Это карта.', 'Это билет?'],
     },
   ],
   vocabulary: [

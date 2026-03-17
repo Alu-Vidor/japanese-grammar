@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN510: Lesson = {
   id: 'n5-10',
@@ -22,6 +22,7 @@ export const lessonN510: Lesson = {
       title: 'この + существительное',
       rule: 'この всегда ставим перед существительным: この本, このメニュー.',
       examples: ['この {本|ほん}は おもしろいです。', 'この メニューは {安|やす}いです。'],
+      translations: ['Эта книга интересная.', 'Это меню дешевое.'],
     },
   ],
   vocabulary: [

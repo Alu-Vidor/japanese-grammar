@@ -1,7 +1,8 @@
-﻿export type GrammarPoint = {
+export type GrammarPoint = {
   title: string
   rule: string
   examples: string[]
+  translations?: string[]
 }
 
 export type LessonStory = {

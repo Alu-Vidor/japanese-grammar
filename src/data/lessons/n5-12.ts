@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN512: Lesson = {
   id: 'n5-12',
@@ -22,6 +22,7 @@ export const lessonN512: Lesson = {
       title: 'あの + существительное',
       rule: 'あの используем перед существительным, когда объект далеко от обоих.',
       examples: ['あの カフェは {有名|ゆうめい}です。', 'あの {建物|たてもの}は {学校|がっこう}です。'],
+      translations: ['Вон то кафе известное.', 'Вон то здание — школа.'],
     },
   ],
   vocabulary: [

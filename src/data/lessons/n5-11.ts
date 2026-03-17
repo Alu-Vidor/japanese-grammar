@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN511: Lesson = {
   id: 'n5-11',
@@ -22,6 +22,7 @@ export const lessonN511: Lesson = {
       title: 'その + существительное',
       rule: 'その ставим перед существительным рядом с собеседником.',
       examples: ['その {紙|かみ}は なんですか。', 'その {電車|でんしゃ}は {大阪|おおさか}へ {行|い}きます。'],
+      translations: ['Что это за бумага?', 'Тот поезд идет в Осаку.'],
     },
   ],
   vocabulary: [

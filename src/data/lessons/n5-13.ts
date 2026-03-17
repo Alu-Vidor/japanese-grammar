@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN513: Lesson = {
   id: 'n5-13',
@@ -22,6 +22,7 @@ export const lessonN513: Lesson = {
       title: 'どれ',
       rule: 'どれ — «который (из этих предметов)?» как самостоятельное слово.',
       examples: ['どれですか。', 'どれが いいですか。'],
+      translations: ['Который?', 'Который хороший?'],
     },
   ],
   vocabulary: [

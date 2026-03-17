@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN519: Lesson = {
   id: 'n5-19',
@@ -22,6 +22,7 @@ export const lessonN519: Lesson = {
       title: 'Связки причин и контраста',
       rule: 'Причина: から / ので. Контраст: けど.',
       examples: ['{雨|あめ}なので、{出|で}かけません。', '{高|たか}いけど、おいしいです。'],
+      translations: ['Так как дождь, я не пойду гулять.', 'Дорого, но вкусно.'],
     },
   ],
   vocabulary: [

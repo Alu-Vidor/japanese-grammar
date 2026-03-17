@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN509: Lesson = {
   id: 'n5-09',
@@ -22,6 +22,7 @@ export const lessonN509: Lesson = {
       title: 'Шаблон с は',
       rule: 'Используем これ/それ/あれ как тему: これは〜 / それは〜 / あれは〜.',
       examples: ['これは {抹茶|まっちゃ}です。', 'それは {土産|みやげ}です。'],
+      translations: ['Это матча.', 'Это сувенир.'],
     },
   ],
   vocabulary: [

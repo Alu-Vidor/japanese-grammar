@@ -1,4 +1,4 @@
-﻿import { type Lesson } from '../types'
+import { type Lesson } from '../types'
 
 export const lessonN517: Lesson = {
   id: 'n5-17',
@@ -22,6 +22,7 @@ export const lessonN517: Lesson = {
       title: 'あそこ',
       rule: 'あそこ — место далеко от говорящего и собеседника.',
       examples: ['あそこは {神社|じんじゃ}です。', 'あそこで {写真|しゃしん}を とります。'],
+      translations: ['Вон там синтоистский храм.', 'Вон там будем фотографироваться.'],
     },
   ],
   vocabulary: [

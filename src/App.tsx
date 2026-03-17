@@ -1,5 +1,6 @@
-import { Fragment, useMemo, useState, type ReactNode } from 'react'
+import { Fragment, useMemo, useState, useEffect, type ReactNode } from 'react'
 import './App.css'
+import { SakuraEffect } from './components/SakuraEffect'
 import tokyoCampusBg from './assets/lessons/tokyo_campus_bg.png'
 import shibuyaNightBg from './assets/lessons/shibuya_night_bg.png'
 import tokyoStationBg from './assets/lessons/tokyo_station_bg.png'
@@ -48,7 +49,6 @@ const getAvatarForCharacter = (name: string): string | null => {
 const normalize = (value: string): string => value.trim().toLowerCase().replace(/\s+/g, ' ')
 const countToken = (items: string[], token: string): number => items.filter((item) => item === token).length
 const getBuilderKey = (lessonId: string, exerciseId: string): string => `${lessonId}::${exerciseId}`
-const unique = (items: string[]): string[] => [...new Set(items)]
 
 function JPText({ text }: { text: string }) {
   const parts: ReactNode[] = []
@@ -84,18 +84,19 @@ function App() {
   const [lessonScores, setLessonScores] = useState<Record<string, LessonScore>>({})
   const [examAnswers, setExamAnswers] = useState<Record<string, string>>({})
   const [examResult, setExamResult] = useState<ExamResult | null>(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  useEffect(() => {
+    setIsTransitioning(true)
+    const timer = setTimeout(() => setIsTransitioning(false), 800)
+    return () => clearTimeout(timer)
+  }, [currentLessonIndex])
 
   const currentLesson = lessons[currentLessonIndex]
   const currentUpgrade = lessonUpgrades[currentLesson.id]
   const storyModeActive = Boolean(currentLesson.story)
   const nextLesson = lessons[currentLessonIndex + 1] ?? null
   const routeProgress = ((currentLessonIndex + 1) / lessons.length) * 100
-  const sceneDetails = unique([...(currentLesson.story?.visuals ?? []), ...currentUpgrade.japaneseDetails]).slice(0, 6)
-  const motionDetails = unique([...(currentLesson.story?.animations ?? []), ...currentUpgrade.animationIdeas]).slice(0, 6)
-  const sceneRefs = currentUpgrade.photoRefs.slice(0, 3)
-  const interactionIdeas = currentUpgrade.engagementBoosts.slice(0, 3)
-  const transitionIdeas = currentUpgrade.transitions.slice(0, 2)
-  const emotionalFinish = currentUpgrade.finale.slice(0, 2)
 
   const completedLessons = useMemo(
     () => lessons.filter((lesson) => lessonScores[lesson.id]?.passed).length,
@@ -182,10 +183,14 @@ function App() {
 
   return (
     <main className="app-shell">
+      <SakuraEffect />
       <header className="hero-block">
         <p className="eyebrow">Japanese Grammar Trainer</p>
-        <h1>JLPT N5: атомарный курс грамматики</h1>
+        <h1 className="brush-stroke">JLPT N5: атомарный курс грамматики</h1>
         <p className="subtitle">Каждый урок закрывает одну тему, с контекстом реальной Японии и заданиями без ввода текста.</p>
+        <div className="header-decoration">
+          <ToriiIcon />
+        </div>
         <p className="progress">Пройдено уроков: {completedLessons}/{lessons.length}</p>
         <p className="progress">Покрытие N5: {coverage.covered}/{coverage.total}</p>
         {coverage.missing.length === 0 ? (
@@ -197,7 +202,10 @@ function App() {
 
       <section className="layout">
         <aside className="sidebar">
-          <h2>Уроки</h2>
+          <div className="sidebar-head">
+            <h2 className="brush-stroke">Уроки</h2>
+            <FanIcon />
+          </div>
           <ul>
             {lessons.map((lesson, index) => {
               const unlocked = isLessonUnlocked(index)
@@ -220,6 +228,11 @@ function App() {
         </aside>
 
         <article key={currentLesson.id} className={`content-card ${storyModeActive ? 'story-mode' : ''}`}>
+          <div className={`shoji-transition-wrapper ${isTransitioning ? 'animating' : ''}`}>
+            <div className="shoji-door left"><span>読み込み中...</span></div>
+            <div className="shoji-door right"><span>加载中...</span></div>
+          </div>
+
           <section className="journey-strip panel">
             <div className="journey-head">
               <div>
@@ -247,22 +260,7 @@ function App() {
             </p>
           </section>
 
-          <section className="lesson-header">
-            <p>{currentLesson.goal}</p>
-            {currentLesson.hook ? <p className="hook-line">{currentLesson.hook}</p> : null}
-            <p className="hint">{currentLesson.japanContext}</p>
-          </section>
 
-          <section className="mission-grid">
-            <div className="mission-card panel">
-              <p className="mission-label">Сейчас ты делаешь</p>
-              <p>{currentLesson.goal}</p>
-            </div>
-            <div className="mission-card panel">
-              <p className="mission-label">Финальный эффект</p>
-              <p>{currentLesson.microResult ?? 'В конце урока ты забираешь новый кусочек маршрута в свой японский день.'}</p>
-            </div>
-          </section>
 
           {LESSON_BGS[currentLesson.id] ? (
             <section className="lesson-illustration">
@@ -271,10 +269,33 @@ function App() {
           ) : null}
 
           {currentLesson.story ? (
+            <section className="intro-dialogue-panel panel">
+              <div className="dialogue-flow">
+                <div className="dialogue-entry">
+                  {getAvatarForCharacter('Маме-сиба') ? <img src={mameshibaAvatar} alt="Mameshiba" className="character-avatar" /> : null}
+                  <div className="grammar-bubble">
+                    <p className="explainer-name">Маме-сиба</p>
+                    <p><strong>Привет!</strong> Сегодня мы {currentLesson.goal.toLowerCase()}</p>
+                  </div>
+                </div>
+                {currentLesson.hook ? (
+                  <div className="dialogue-entry reverse">
+                    <div className="grammar-bubble">
+                      <p className="explainer-name">Аой</p>
+                      <p>{currentLesson.hook}</p>
+                    </div>
+                    {getAvatarForCharacter('Аой') ? <img src={aoiAvatar} alt="Aoi" className="character-avatar" /> : null}
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          ) : null}
+
+          {currentLesson.story ? (
             <section className="story-panel panel">
               <div className="story-grid">
                 <div className="characters-container">
-                  <h4>В этой сцене</h4>
+                  <h4>Кто здесь?</h4>
                   <div className="character-list">
                     {currentLesson.story.characters.map((item, idx) => {
                       const avatarSrc = getAvatarForCharacter(item)
@@ -287,100 +308,37 @@ function App() {
                     })}
                   </div>
                 </div>
-                <div>
-                  <h4>В кадре</h4>
-                  <ul>
-                    {sceneDetails.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4>Оживление</h4>
-                  <ul>
-                    {motionDetails.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
               </div>
             </section>
           ) : null}
 
-          <section className="atmosphere-grid">
-            <div className="panel atmosphere-card">
-              <p className="mission-label">Атмосфера остановки</p>
-              <div className="detail-cloud">
-                {sceneDetails.map((item) => (
-                  <span key={item} className="detail-pill">{item}</span>
-                ))}
-              </div>
-            </div>
-            <div className="panel atmosphere-card">
-              <p className="mission-label">Визуальный ритм</p>
-              <div className="detail-cloud">
-                {motionDetails.slice(0, 4).map((item) => (
-                  <span key={item} className="detail-pill motion">{item}</span>
-                ))}
-              </div>
-            </div>
-            <div className="panel atmosphere-card">
-              <p className="mission-label">Фото-референсы сцены</p>
-              <div className="ref-gallery">
-                {sceneRefs.map((ref) => (
-                  <a key={ref.url} href={ref.url} target="_blank" rel="noreferrer" className="ref-item">
-                    <img src={ref.url} alt={ref.label} loading="lazy" />
-                    <span>{ref.label}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </section>
 
-          <section className="journey-details-grid">
-            <div className="panel journey-detail-card">
-              <p className="mission-label">Интерактив без ввода текста</p>
-              <ul>
-                {interactionIdeas.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="panel journey-detail-card">
-              <p className="mission-label">Переход к следующей остановке</p>
-              <ul>
-                {transitionIdeas.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="panel journey-detail-card">
-              <p className="mission-label">Микронаграда и эмоция финала</p>
-              <ul>
-                {emotionalFinish.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </section>
 
           <section>
-            <h3>1) Что замечаем в реплике</h3>
+            <h3 className="brush-stroke">1) Что замечаем в реплике</h3>
             <div className="grammar-stack">
               {currentLesson.grammar.map((point, idx) => {
                 const explainerNames = ['Маме-сиба (маскот курса)', 'Аой (японская подруга)', 'Кай (иностранный студент)']
                 const explainerName = explainerNames[idx % explainerNames.length]
                 const avatarSrc = getAvatarForCharacter(explainerName)
                 return (
-                  <div className="grammar-bubble-container" key={point.title}>
+                  <div className="dialogue-entry" key={point.title}>
                     {avatarSrc ? <img src={avatarSrc} alt={explainerName.split(' ')[0]} className="character-avatar animate-pulse" /> : null}
                     <div className="panel grammar-bubble">
                       <p className="explainer-name">{explainerName.split(' ')[0]}</p>
                       <h4>{point.title}</h4>
                       <p>{point.rule}</p>
                       <ul>
-                        {point.examples.map((example) => (
-                          <li key={example}><JPText text={example} /></li>
+                        {point.examples.map((example, eIdx) => (
+                          <li key={example}>
+                            <JPText text={example} />
+                            {point.translations?.[eIdx] ? (
+                              <details className="translation-spoiler">
+                                <summary>Перевод</summary>
+                                <p>{point.translations[eIdx]}</p>
+                              </details>
+                            ) : null}
+                          </li>
                         ))}
                       </ul>
                     </div>
@@ -391,7 +349,7 @@ function App() {
           </section>
 
           <section>
-            <h3>2) Что увидишь и услышишь в сцене</h3>
+            <h3 className="brush-stroke">2) Что увидишь и услышишь в сцене</h3>
             <div className="vocabulary-grid">
               {currentLesson.vocabulary.map((item) => (
                 <article key={`${item.jp}-${item.reading}`} className="word-card">
@@ -404,7 +362,7 @@ function App() {
           </section>
 
           <section>
-            <h3>3) Игровая практика без ввода текста</h3>
+            <h3 className="brush-stroke">3) Игровая практика без ввода текста</h3>
             <div className="exercise-stack">
               {currentLesson.practice.map((exercise) => (
                 <PracticeBlock
@@ -423,7 +381,7 @@ function App() {
           </section>
 
           <section>
-            <h3>4) Финальная мини-сцена</h3>
+            <h3 className="brush-stroke">4) Финальная мини-сцена</h3>
             <div className="panel cloze-panel">
               <h4>{currentLesson.cloze.title}</h4>
               <p className="cloze-text">
@@ -598,6 +556,28 @@ function ExamQuestionBlock({ question, value, onChange }: ExamQuestionBlockProps
       </div>
       <p className="hint">{question.explanation}</p>
     </article>
+  )
+}
+
+function ToriiIcon() {
+  return (
+    <svg className="torii-icon animate-float" width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 20 H90 V28 H10 Z" fill="#d35d43" />
+      <path d="M15 32 H85 V38 H15 Z" fill="#d35d43" />
+      <rect x="25" y="28" width="8" height="60" fill="#d35d43" />
+      <rect x="67" y="28" width="8" height="60" fill="#d35d43" />
+      <rect x="40" y="38" width="20" height="6" fill="#d35d43" />
+    </svg>
+  )
+}
+
+function FanIcon() {
+  return (
+    <svg className="fan-icon animate-pulse" width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 80 L20 40 A40 40 0 0 1 80 40 Z" fill="#d35d43" opacity="0.8" />
+      <path d="M50 80 L35 45 M50 80 L50 40 M50 80 L65 45" stroke="#fff" strokeWidth="2" />
+      <circle cx="50" cy="80" r="3" fill="#3d2b1f" />
+    </svg>
   )
 }
 
