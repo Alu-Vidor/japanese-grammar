@@ -93,6 +93,9 @@ function App() {
   const sceneDetails = unique([...(currentLesson.story?.visuals ?? []), ...currentUpgrade.japaneseDetails]).slice(0, 6)
   const motionDetails = unique([...(currentLesson.story?.animations ?? []), ...currentUpgrade.animationIdeas]).slice(0, 6)
   const sceneRefs = currentUpgrade.photoRefs.slice(0, 3)
+  const interactionIdeas = currentUpgrade.engagementBoosts.slice(0, 3)
+  const transitionIdeas = currentUpgrade.transitions.slice(0, 2)
+  const emotionalFinish = currentUpgrade.finale.slice(0, 2)
 
   const completedLessons = useMemo(
     () => lessons.filter((lesson) => lessonScores[lesson.id]?.passed).length,
@@ -323,13 +326,41 @@ function App() {
             </div>
             <div className="panel atmosphere-card">
               <p className="mission-label">Фото-референсы сцены</p>
-              <div className="ref-links">
+              <div className="ref-gallery">
                 {sceneRefs.map((ref) => (
-                  <a key={ref.url} href={ref.url} target="_blank" rel="noreferrer">
-                    {ref.label}
+                  <a key={ref.url} href={ref.url} target="_blank" rel="noreferrer" className="ref-item">
+                    <img src={ref.url} alt={ref.label} loading="lazy" />
+                    <span>{ref.label}</span>
                   </a>
                 ))}
               </div>
+            </div>
+          </section>
+
+          <section className="journey-details-grid">
+            <div className="panel journey-detail-card">
+              <p className="mission-label">Интерактив без ввода текста</p>
+              <ul>
+                {interactionIdeas.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="panel journey-detail-card">
+              <p className="mission-label">Переход к следующей остановке</p>
+              <ul>
+                {transitionIdeas.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="panel journey-detail-card">
+              <p className="mission-label">Микронаграда и эмоция финала</p>
+              <ul>
+                {emotionalFinish.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
           </section>
 
