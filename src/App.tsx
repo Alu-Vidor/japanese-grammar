@@ -1,5 +1,15 @@
-﻿import { Fragment, useMemo, useState, type ReactNode } from 'react'
+import { Fragment, useMemo, useState, type ReactNode } from 'react'
 import './App.css'
+import tokyoCampusBg from './assets/lessons/tokyo_campus_bg.png'
+import shibuyaNightBg from './assets/lessons/shibuya_night_bg.png'
+import tokyoStationBg from './assets/lessons/tokyo_station_bg.png'
+import uenoParkBg from './assets/lessons/ueno_park_bg.png'
+import kyotoStreetBg from './assets/lessons/kyoto_street_bg.png'
+import asakusaTempleBg from './assets/lessons/asakusa_temple_bg.png'
+import aoiAvatar from './assets/characters/avatar_aoi.png'
+import kaiAvatar from './assets/characters/avatar_kai.png'
+import mameshibaAvatar from './assets/characters/avatar_mameshiba.png'
+
 import {
   N5_GRAMMAR_CHECKLIST,
   finalExam,
@@ -15,9 +25,25 @@ import {
 type LessonScore = { correct: number; total: number; passed: boolean }
 type ExamResult = { correct: number; total: number; passed: boolean }
 
+const LESSON_BGS: Record<string, string> = {
+  'n5-01': tokyoCampusBg, 'n5-15': tokyoCampusBg,
+  'n5-02': shibuyaNightBg, 'n5-07': shibuyaNightBg, 'n5-19': shibuyaNightBg,
+  'n5-03': tokyoStationBg, 'n5-04': tokyoStationBg, 'n5-06': tokyoStationBg, 'n5-10': tokyoStationBg, 'n5-11': tokyoStationBg, 'n5-16': tokyoStationBg, 'n5-18': tokyoStationBg, 'n5-20': tokyoStationBg,
+  'n5-05': uenoParkBg, 'n5-14': uenoParkBg, 'n5-17': uenoParkBg,
+  'n5-09': kyotoStreetBg, 'n5-12': kyotoStreetBg, 'n5-13': kyotoStreetBg,
+  'n5-08': asakusaTempleBg,
+}
+
 const LESSON_PASS_RATE = 0.75
 const EXAM_PASS_RATE = 0.75
 const FURIGANA_RE = /\{([^|{}]+)\|([^{}]+)\}/g
+
+const getAvatarForCharacter = (name: string): string | null => {
+  if (name.includes('Аой')) return aoiAvatar
+  if (name.includes('Кай')) return kaiAvatar
+  if (name.includes('Маме-сиба')) return mameshibaAvatar
+  return null
+}
 
 const normalize = (value: string): string => value.trim().toLowerCase().replace(/\s+/g, ' ')
 const countToken = (items: string[], token: string): number => items.filter((item) => item === token).length
@@ -230,28 +256,33 @@ function App() {
               <p>{currentLesson.goal}</p>
             </div>
             <div className="mission-card panel">
-              <p className="mission-label">Ощущение сцены</p>
-              <p>{currentLesson.story ? currentLesson.story.scene : currentLesson.japanContext}</p>
-            </div>
-            <div className="mission-card panel">
               <p className="mission-label">Финальный эффект</p>
               <p>{currentLesson.microResult ?? 'В конце урока ты забираешь новый кусочек маршрута в свой японский день.'}</p>
             </div>
           </section>
 
+          {LESSON_BGS[currentLesson.id] ? (
+            <section className="lesson-illustration">
+              <img src={LESSON_BGS[currentLesson.id]} alt="Lesson atmosphere" className="animate-fade-in animate-parallax-bg" />
+            </section>
+          ) : null}
+
           {currentLesson.story ? (
             <section className="story-panel panel">
-              <p className="story-stop">{currentLesson.story.stopLabel}</p>
-              <h3>{currentLesson.story.location}</h3>
-              <p>{currentLesson.story.scene}</p>
               <div className="story-grid">
-                <div>
-                  <h4>Персонажи</h4>
-                  <ul>
-                    {currentLesson.story.characters.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
+                <div className="characters-container">
+                  <h4>В этой сцене</h4>
+                  <div className="character-list">
+                    {currentLesson.story.characters.map((item, idx) => {
+                      const avatarSrc = getAvatarForCharacter(item)
+                      return (
+                        <span key={item} className={`character-chip animate-float delay-${idx % 3}`}>
+                          {avatarSrc ? <img src={avatarSrc} alt={item} className="chip-avatar" /> : null}
+                          {item}
+                        </span>
+                      )
+                    })}
+                  </div>
                 </div>
                 <div>
                   <h4>В кадре</h4>
@@ -262,7 +293,7 @@ function App() {
                   </ul>
                 </div>
                 <div>
-                  <h4>Оживление сцены</h4>
+                  <h4>Оживление</h4>
                   <ul>
                     {motionDetails.map((item) => (
                       <li key={item}>{item}</li>
@@ -304,18 +335,27 @@ function App() {
 
           <section>
             <h3>1) Что замечаем в реплике</h3>
-            <div className="grid">
-              {currentLesson.grammar.map((point) => (
-                <div className="panel" key={point.title}>
-                  <h4>{point.title}</h4>
-                  <p>{point.rule}</p>
-                  <ul>
-                    {point.examples.map((example) => (
-                      <li key={example}><JPText text={example} /></li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            <div className="grammar-stack">
+              {currentLesson.grammar.map((point, idx) => {
+                const explainerNames = ['Маме-сиба (маскот курса)', 'Аой (японская подруга)', 'Кай (иностранный студент)']
+                const explainerName = explainerNames[idx % explainerNames.length]
+                const avatarSrc = getAvatarForCharacter(explainerName)
+                return (
+                  <div className="grammar-bubble-container" key={point.title}>
+                    {avatarSrc ? <img src={avatarSrc} alt={explainerName.split(' ')[0]} className="character-avatar animate-pulse" /> : null}
+                    <div className="panel grammar-bubble">
+                      <p className="explainer-name">{explainerName.split(' ')[0]}</p>
+                      <h4>{point.title}</h4>
+                      <p>{point.rule}</p>
+                      <ul>
+                        {point.examples.map((example) => (
+                          <li key={example}><JPText text={example} /></li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </section>
 
