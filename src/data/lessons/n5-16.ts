@@ -53,4 +53,22 @@ export const lessonN516: Lesson = {
     textParts: ['A: ', 'は {出口|でぐち}ですか。B: はい、そうです。'],
     blanks: [{ id: 'l16-t1', options: ['そこ', 'ここ', 'あそこ'], answer: 'そこ' }],
   },
+    dialogues: {
+          grammar: {
+            character: "Аой",
+            text: "Там, где стоишь ты — это そこ. Место у собеседника."
+          },
+          vocabulary: {
+            character: "Кай",
+            text: "Больше локаций для диалогов на расстоянии."
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Подбери правильное слово для места в паре шагов от тебя."
+          },
+          cloze: {
+            character: "Аой",
+            text: "Попроси положить вещь туда, к товарищу."
+          }
+        }
 }

@@ -53,4 +53,22 @@ export const lessonN511: Lesson = {
     textParts: ['A: ', ' {時刻表|じこくひょう}を {見|み}せてください。B: はい。'],
     blanks: [{ id: 'l11-t1', options: ['その', 'この', 'あの'], answer: 'その' }],
   },
+    dialogues: {
+          grammar: {
+            character: "Аой",
+            text: "То же самое с その: используем его только перед существительным у собеседника."
+          },
+          vocabulary: {
+            character: "Кай",
+            text: "Слова, обозначающие вещи твоего товарища."
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Собери фразу про вещь в руках у друга."
+          },
+          cloze: {
+            character: "Аой",
+            text: "Как Кай попросит у Аой её ручку?"
+          }
+        }
 }

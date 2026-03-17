@@ -53,4 +53,22 @@ export const lessonN518: Lesson = {
     textParts: ['A: {出口|でぐち}は ', 'ですか。B: あそこです。'],
     blanks: [{ id: 'l18-t1', options: ['どこ', 'どれ', 'どの'], answer: 'どこ' }],
   },
+    dialogues: {
+          grammar: {
+            character: "Аой",
+            text: "Вопрос どこ означает «где?». Очень важно для туристов!"
+          },
+          vocabulary: {
+            character: "Кай",
+            text: "Туалет, выход, станция — всё, что ты можешь искать."
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Попытайся задать вопрос «где находится...»"
+          },
+          cloze: {
+            character: "Аой",
+            text: "Смоделируем ситуацию в метро. Спроси дорогу."
+          }
+        }
 }

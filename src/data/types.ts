@@ -67,6 +67,13 @@ export type ClozeExercise = {
   blanks: ClozeChoiceBlank[]
 }
 
+export type LessonDialogues = {
+  grammar?: { character: string; text: string }
+  vocabulary?: { character: string; text: string }
+  practice?: { character: string; text: string }
+  cloze?: { character: string; text: string }
+}
+
 export type Lesson = {
   id: string
   title: string
@@ -80,6 +87,7 @@ export type Lesson = {
   vocabulary: VocabularyItem[]
   practice: PracticeExercise[]
   cloze: ClozeExercise
+  dialogues?: LessonDialogues
 }
 
 export type ExamQuestion = {

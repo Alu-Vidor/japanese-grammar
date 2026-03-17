@@ -108,4 +108,22 @@ export const lessonKana03: Lesson = {
       { id: 'k3-t3', options: ['na', 'ha', 'ma'], answer: 'na' },
     ],
   },
+    dialogues: {
+          grammar: {
+            character: "Кай",
+            text: "Озвончения и слоги с `я, ю, ё` — просто добавляем кавычки или кружок, и звук меняется!"
+          },
+          vocabulary: {
+            character: "Аой",
+            text: "Давай посмотрим на слова со звонкими звуками."
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Держись! Звонкие звуки легко спутать с глухими в тестах."
+          },
+          cloze: {
+            character: "Кай",
+            text: "Попробуешь прочитать фразу с дакутэном?"
+          }
+        }
 }

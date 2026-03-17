@@ -315,7 +315,17 @@ function App() {
 
 
           <section>
-            <h3 className="brush-stroke">1) Что замечаем в реплике</h3>
+            {currentLesson.dialogues?.grammar ? (
+              <div className="dialogue-entry">
+                {getAvatarForCharacter(currentLesson.dialogues.grammar.character) ? (
+                  <img src={getAvatarForCharacter(currentLesson.dialogues.grammar.character)!} alt={currentLesson.dialogues.grammar.character} className="character-avatar" />
+                ) : null}
+                <div className="grammar-bubble">
+                  <p className="explainer-name">{currentLesson.dialogues.grammar.character}</p>
+                  <p>{currentLesson.dialogues.grammar.text}</p>
+                </div>
+              </div>
+            ) : null}
             <div className="grammar-stack">
               {currentLesson.grammar.map((point, idx) => {
                 const explainerNames = ['Маме-сиба (маскот курса)', 'Аой (японская подруга)', 'Кай (иностранный студент)']
@@ -349,7 +359,17 @@ function App() {
           </section>
 
           <section>
-            <h3 className="brush-stroke">2) Что увидишь и услышишь в сцене</h3>
+            {currentLesson.dialogues?.vocabulary ? (
+              <div className="dialogue-entry reverse">
+                <div className="grammar-bubble">
+                  <p className="explainer-name">{currentLesson.dialogues.vocabulary.character}</p>
+                  <p>{currentLesson.dialogues.vocabulary.text}</p>
+                </div>
+                {getAvatarForCharacter(currentLesson.dialogues.vocabulary.character) ? (
+                  <img src={getAvatarForCharacter(currentLesson.dialogues.vocabulary.character)!} alt={currentLesson.dialogues.vocabulary.character} className="character-avatar" />
+                ) : null}
+              </div>
+            ) : null}
             <div className="vocabulary-grid">
               {currentLesson.vocabulary.map((item) => (
                 <article key={`${item.jp}-${item.reading}`} className="word-card">
@@ -362,7 +382,17 @@ function App() {
           </section>
 
           <section>
-            <h3 className="brush-stroke">3) Игровая практика без ввода текста</h3>
+            {currentLesson.dialogues?.practice ? (
+              <div className="dialogue-entry">
+                {getAvatarForCharacter(currentLesson.dialogues.practice.character) ? (
+                  <img src={getAvatarForCharacter(currentLesson.dialogues.practice.character)!} alt={currentLesson.dialogues.practice.character} className="character-avatar" />
+                ) : null}
+                <div className="grammar-bubble">
+                  <p className="explainer-name">{currentLesson.dialogues.practice.character}</p>
+                  <p>{currentLesson.dialogues.practice.text}</p>
+                </div>
+              </div>
+            ) : null}
             <div className="exercise-stack">
               {currentLesson.practice.map((exercise) => (
                 <PracticeBlock
@@ -381,7 +411,17 @@ function App() {
           </section>
 
           <section>
-            <h3 className="brush-stroke">4) Финальная мини-сцена</h3>
+            {currentLesson.dialogues?.cloze ? (
+              <div className="dialogue-entry reverse">
+                <div className="grammar-bubble">
+                  <p className="explainer-name">{currentLesson.dialogues.cloze.character}</p>
+                  <p>{currentLesson.dialogues.cloze.text}</p>
+                </div>
+                {getAvatarForCharacter(currentLesson.dialogues.cloze.character) ? (
+                  <img src={getAvatarForCharacter(currentLesson.dialogues.cloze.character)!} alt={currentLesson.dialogues.cloze.character} className="character-avatar" />
+                ) : null}
+              </div>
+            ) : null}
             <div className="panel cloze-panel">
               <h4>{currentLesson.cloze.title}</h4>
               <p className="cloze-text">

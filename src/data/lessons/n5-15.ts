@@ -53,4 +53,22 @@ export const lessonN515: Lesson = {
     textParts: ['A: ', 'は {入口|いりぐち}です。B: ありがとうございます。'],
     blanks: [{ id: 'l15-t1', options: ['ここ', 'そこ', 'あそこ'], answer: 'ここ' }],
   },
+    dialogues: {
+          grammar: {
+            character: "Кай",
+            text: "Переходим к местам! ここ — это место прямо здесь."
+          },
+          vocabulary: {
+            character: "Аой",
+            text: "Здания, локации, комнаты."
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Укажи на место, где вы стоите."
+          },
+          cloze: {
+            character: "Кай",
+            text: "Объясни прохожему, что находится здесь."
+          }
+        }
 }

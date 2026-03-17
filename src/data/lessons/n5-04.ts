@@ -55,4 +55,22 @@ export const lessonN504: Lesson = {
       { id: 'l4-t1', options: ['は', 'も', 'が'], answer: 'も' },
     ],
   },
+    dialogues: {
+          grammar: {
+            character: "Кай",
+            text: "Частица も означает «тоже» и заменяет частицу は. Очень удобно!"
+          },
+          vocabulary: {
+            character: "Аой",
+            text: "Полезная лексика для сравнений и согласий."
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Вставь も туда, где нужно сказать «я тоже»."
+          },
+          cloze: {
+            character: "Кай",
+            text: "Твой друг заказал то же самое. Как он это скажет?"
+          }
+        }
 }

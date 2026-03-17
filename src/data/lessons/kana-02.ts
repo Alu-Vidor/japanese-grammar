@@ -108,4 +108,22 @@ export const lessonKana02: Lesson = {
       { id: 'k2-t3', options: ['ta', 'ka', 'sa'], answer: 'ta' },
     ],
   },
+    dialogues: {
+          grammar: {
+            character: "Аой",
+            text: "Теперь добавим согласные k, s, t, n, h, m, y, r, w. Хирагана становится больше!"
+          },
+          vocabulary: {
+            character: "Кай",
+            text: "Смотри, сколько новых слов можно собрать теперь!"
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Главное — не путать знаки. Попробуй себя в упражнениях."
+          },
+          cloze: {
+            character: "Кай",
+            text: "Снова мини-задание! Прочитаешь это слово?"
+          }
+        }
 }

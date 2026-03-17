@@ -108,4 +108,22 @@ export const lessonKana01: Lesson = {
       { id: 'k1-t3', options: ['ka', 'sa', 'ta'], answer: 'ka' },
     ],
   },
+    dialogues: {
+          grammar: {
+            character: "Маме-сиба",
+            text: "Посмотри, это основа японского — гласные звуки хираганы!"
+          },
+          vocabulary: {
+            character: "Аой",
+            text: "Вот первые слова, где встречаются эти гласные. Запоминай!"
+          },
+          practice: {
+            character: "Кай",
+            text: "Попробуй угадать, как они читаются. Это не так сложно!"
+          },
+          cloze: {
+            character: "Маме-сиба",
+            text: "А теперь давай соберем короткое слово из этих звуков."
+          }
+        }
 }

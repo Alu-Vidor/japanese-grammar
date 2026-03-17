@@ -53,4 +53,22 @@ export const lessonN513: Lesson = {
     textParts: ['A: {赤|あか}と {青|あお}、', ' が いいですか。B: {青|あお}です。'],
     blanks: [{ id: 'l13-t1', options: ['どれ', 'どの', 'どこ'], answer: 'どれ' }],
   },
+    dialogues: {
+          grammar: {
+            character: "Маме-сиба",
+            text: "Частица どれ? Спрашиваем «какой из?» среди нескольких предметов."
+          },
+          vocabulary: {
+            character: "Аой",
+            text: "Слова из ассортимента магазина."
+          },
+          practice: {
+            character: "Кай",
+            text: "Задай вопрос продавцу с помощью どれ."
+          },
+          cloze: {
+            character: "Маме-сиба",
+            text: "Твой друг не может выбрать. Какой вопрос он задаст?"
+          }
+        }
 }

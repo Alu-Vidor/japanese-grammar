@@ -53,4 +53,22 @@ export const lessonN508: Lesson = {
     textParts: ['A: ', 'は {有名|ゆうめい}な {塔|とう}です。B: きれいですね。'],
     blanks: [{ id: 'l8-t1', options: ['これ', 'それ', 'あれ'], answer: 'あれ' }],
   },
+    dialogues: {
+          grammar: {
+            character: "Кай",
+            text: "А вот あれ — это предмет, который далеко и от тебя, и от собеседника."
+          },
+          vocabulary: {
+            character: "Аой",
+            text: "Объекты на улице и вдалеке."
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Укажи на здание вдалеке с помощью あれ."
+          },
+          cloze: {
+            character: "Кай",
+            text: "Взгляните туда! Что прозвучит в мини-сцене?"
+          }
+        }
 }

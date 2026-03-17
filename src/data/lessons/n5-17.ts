@@ -53,4 +53,22 @@ export const lessonN517: Lesson = {
     textParts: ['A: ', 'で {写真|しゃしん}を とりましょう。B: いいですね。'],
     blanks: [{ id: 'l17-t1', options: ['あそこ', 'そこ', 'ここ'], answer: 'あそこ' }],
   },
+    dialogues: {
+          grammar: {
+            character: "Кай",
+            text: "А воооон там вдалеке — это あそこ."
+          },
+          vocabulary: {
+            character: "Аой",
+            text: "Горы, парки, далекие станции."
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Укажи на дальний объект с помощью あそこ."
+          },
+          cloze: {
+            character: "Кай",
+            text: "Как сказать о кафе на другом конце улицы?"
+          }
+        }
 }

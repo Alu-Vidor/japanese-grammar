@@ -113,4 +113,22 @@ export const lessonKana04: Lesson = {
       { id: 'k4-t3', options: ['ma', 'ra', 'wa'], answer: 'ma' },
     ],
   },
+    dialogues: {
+          grammar: {
+            character: "Кай",
+            text: "Переходим к катакане! Она угловатая и используется для иностранных слов."
+          },
+          vocabulary: {
+            character: "Аой",
+            text: "Кофе, отель... Заимствованные слова мы пишем именно так!"
+          },
+          practice: {
+            character: "Маме-сиба",
+            text: "Сможешь отличить катакану от хираганы?"
+          },
+          cloze: {
+            character: "Аой",
+            text: "Как бы ты прочитал это английское слово по-японски?"
+          }
+        }
 }
